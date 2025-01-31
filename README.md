@@ -28,6 +28,31 @@ pip install torch
 python sparse_transformer.py
 ```
 
+## Output
+
+When running the training script, you should see output similar to this:
+
+```
+2025-01-31 10:15:23,456 - INFO - Starting training...
+2025-01-31 10:15:23,789 - INFO - Generated 1000 sample sequences...
+2025-01-31 10:15:23,901 - INFO - Split data into 800 train and 200 validation sequences
+
+2025-01-31 10:15:24,123 - INFO - Epoch 1/5
+2025-01-31 10:15:24,456 - INFO - Batch 0, Loss: 4.6573
+2025-01-31 10:15:24,789 - INFO - Batch 10, Loss: 4.3291
+2025-01-31 10:15:25,012 - INFO - Training Loss: 4.2845
+2025-01-31 10:15:25,234 - INFO - Validation Loss: 4.1932
+2025-01-31 10:15:25,345 - INFO - Saved new best model checkpoint
+2025-01-31 10:15:25,456 - INFO - Epoch completed in 1.33s
+
+[...]
+
+2025-01-31 10:15:35,678 - INFO - Training completed in 12.22s
+2025-01-31 10:15:35,789 - INFO - Best validation loss: 3.2456
+```
+
+The model saves checkpoints to `./checkpoints/` whenever the validation loss improves.
+
 ## Architecture
 
 The current implementation includes:
