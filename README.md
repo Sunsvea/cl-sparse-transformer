@@ -14,7 +14,7 @@ This repository contains a PyTorch implementation of a Transformer model with sp
 
 ```bash
 # Clone the repository
-git clone https://github.com/Sunsvea/sparse-transformer.git
+git clone https://github.com/yourusername/sparse-transformer.git
 cd sparse-transformer
 
 # Install dependencies
@@ -39,8 +39,8 @@ The current implementation includes:
 ## TODO List
 
 ### Phase 1: Core Functionality
-- [ ] Add proper data loading and preprocessing
-- [ ] Implement validation loop
+- [x] Add proper data loading and preprocessing
+- [x] Implement validation loop
 - [ ] Add model checkpointing
 - [ ] Add logging and metrics tracking
 - [ ] Write unit tests for core components
@@ -86,19 +86,20 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @software{sparse_transformer2025,
-  author = {Dean Coulstock},
+  author = {Your Name},
   title = {Sparse Transformer Implementation},
   year = {2025},
   publisher = {GitHub},
-  url = {https://github.com/Sunsvea/cl-sparse-transformer}
+  url = {https://github.com/yourusername/sparse-transformer}
 }
 ```
 
 ## Contact
 
-- Dean Coulstock 
-- Chickenstock02@gmail.com
-- LinkedIn: https://www.linkedin.com/in/dean-coulstock/
+- Your Name
+- Your Email
+- Twitter/X: @yourusername
+- LinkedIn: your-linkedin-profile
 
 ## Acknowledgments
 

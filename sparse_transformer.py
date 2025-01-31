@@ -95,33 +95,112 @@ class SparseTransformer(nn.Module):
             
         return self.fc(x)
 
-def train_example():
-    # Create a simple sequence prediction task
+"""
+Sparse Transformer Implementation
+Author: Dean Coulstock
+GitHub: https://github.com/Sunsvea/sparse-transformer
+"""
+
+import logging
+import time
+from pathlib import Path
+
+# Set up logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# Training and validation functions
+def train_epoch(model, train_loader, criterion, optimizer):
+    model.train()
+    total_loss = 0
+    
+    for batch_idx, (x, y) in enumerate(train_loader):
+        optimizer.zero_grad()
+        output = model(x)
+        loss = criterion(output.view(-1, output.size(-1)), y.view(-1))
+        loss.backward()
+        optimizer.step()
+        
+        total_loss += loss.item()
+        
+        if batch_idx % 10 == 0:
+            print(f'Batch {batch_idx}, Loss: {loss.item():.4f}')
+    
+    return total_loss / len(train_loader)
+
+def validate(model, val_loader, criterion):
+    model.eval()
+    total_loss = 0
+    
+    with torch.no_grad():
+        for x, y in val_loader:
+            output = model(x)
+            loss = criterion(output.view(-1, output.size(-1)), y.view(-1))
+            total_loss += loss.item()
+    
+    return total_loss / len(val_loader)
+
+def train_model(epochs=5, save_dir='checkpoints'):
+    from data_loader import get_dataloaders
+    
+    # Create save directory
+    save_dir = Path(save_dir)
+    save_dir.mkdir(exist_ok=True)
+    
+    # Hyperparameters
     vocab_size = 100
-    seq_len = 20
     batch_size = 32
     
-    # Initialize model
+    # Get data
+    train_loader, val_loader = get_dataloaders(batch_size=batch_size)
+    
+    # Initialize model and training components
     model = SparseTransformer(vocab_size=vocab_size)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
     
+    # Training tracking
+    best_val_loss = float('inf')
+    start_time = time.time()
+    
+    logger.info("Starting training...")
+    
     # Training loop
-    for epoch in range(5):
-        # Generate random sequences for demonstration
-        x = torch.randint(0, vocab_size, (batch_size, seq_len))
-        y = torch.randint(0, vocab_size, (batch_size, seq_len))
+    for epoch in range(epochs):
+        epoch_start = time.time()
+        logger.info(f"\nEpoch {epoch+1}/{epochs}")
         
-        # Forward pass
-        outputs = model(x)
-        loss = criterion(outputs.view(-1, vocab_size), y.view(-1))
+        # Train
+        train_loss = train_epoch(model, train_loader, criterion, optimizer)
+        logger.info(f"Training Loss: {train_loss:.4f}")
         
-        # Backward pass
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+        # Validate
+        val_loss = validate(model, val_loader, criterion)
+        logger.info(f"Validation Loss: {val_loss:.4f}")
         
-        print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
+        # Save checkpoint if best model
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            checkpoint = {
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'train_loss': train_loss,
+                'val_loss': val_loss,
+            }
+            torch.save(checkpoint, save_dir / f'model_best.pt')
+            logger.info("Saved new best model checkpoint")
+        
+        # Log epoch stats
+        epoch_time = time.time() - epoch_start
+        logger.info(f"Epoch completed in {epoch_time:.2f}s")
+    
+    total_time = time.time() - start_time
+    logger.info(f"\nTraining completed in {total_time:.2f}s")
+    logger.info(f"Best validation loss: {best_val_loss:.4f}")
 
 if __name__ == "__main__":
-    train_example()
+    train_model()
