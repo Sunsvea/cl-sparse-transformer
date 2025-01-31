@@ -86,20 +86,19 @@ If you use this code in your research, please cite:
 
 ```bibtex
 @software{sparse_transformer2025,
-  author = {Your Name},
+  author = {Dean Coulstock},
   title = {Sparse Transformer Implementation},
   year = {2025},
   publisher = {GitHub},
-  url = {https://github.com/yourusername/sparse-transformer}
+  url = {https://github.com/Sunsvea/sparse-transformer}
 }
 ```
 
 ## Contact
 
-- Your Name
-- Your Email
-- Twitter/X: @yourusername
-- LinkedIn: your-linkedin-profile
+- Dean Coulstock
+- Chickenstock02@gmail.com
+- LinkedIn: https://www.linkedin.com/in/dean-coulstock/
 
 ## Acknowledgments
 
